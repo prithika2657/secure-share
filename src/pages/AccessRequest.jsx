@@ -17,9 +17,16 @@ function AccessRequest({requests, setRequests, logs, setLogs }) {
       console.log("Firestore Docs:", docs);
       console.log("Looking for ID:", id);
 
-     docs.forEach((d) => {
-     console.log("Document:", d);
-     });
+      docs.forEach((d) => {
+  console.log(
+    "Firestore ID:",
+    d.accessId,
+    "==",
+    id,
+    "?",
+    d.accessId === id
+  );
+});
 
  const found = docs.find(
   (d) => d.accessId === id

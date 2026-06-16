@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Requests from "./pages/Requests";
 import AuditLogs from "./pages/AuditLogs";
 import AccessRequest from "./pages/AccessRequest.jsx";
+function RouteDebugger() {
+  const location = useLocation();
+
+  console.log("PATH:", location.pathname);
+
+  return null;
+}
 export default function App() {
  const [documents, setDocuments] = useState(() => {
   return JSON.parse(localStorage.getItem("documents")) || [];
@@ -20,10 +27,14 @@ export default function App() {
 
   return (
     <HashRouter>
+    <RouteDebugger />
       <div className="flex">
         <Sidebar />
 
         <div className="flex-1">
+          <h1 className="text-red-500 text-3xl">
+  VERSION 2
+</h1>
           <Routes>
             <Route
               path="/"
