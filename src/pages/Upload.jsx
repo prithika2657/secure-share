@@ -13,14 +13,15 @@ function Upload({ documents, setDocuments, requests, setRequests,logs,setLogs })
     console.log("Name or file missing", name, file);
     return;
   }
-
+  const uniqueId = `doc-${Math.random()
+  .toString(36)
+  .substring(2, 10)}`;
   // Create new document
   const newDoc = {
     id: Date.now(),
     name,
     fileName: file.name,
-    accessLink: `${window.location.origin}/access/doc-${Math.random().toString(36)
-  .substring(2, 10)}`
+    accessLink: `https://secure-share-je1hs81ip-prithika2657s-projects.vercel.app/access/${uniqueId}`
   };
 try {
   await addDoc(collection(db, "documents"), newDoc);
