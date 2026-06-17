@@ -11,7 +11,7 @@ function AuditLogs({ logs =[] }) {
         ) : (
           logs.map((log) => (
             <div
-              key={log.id}
+               key={log.id}
               className="border-b py-2"
             >
               <p>
