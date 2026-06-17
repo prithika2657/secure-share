@@ -16,8 +16,7 @@ function Upload({ documents, setDocuments, requests, setRequests,logs,setLogs })
   const uniqueId = `doc-${Math.random()
   .toString(36)
   .substring(2, 10)}`;
-  const accessLink =
-  `https://secure-share-je1hs81ip-prithika2657s-projects.vercel.app/#/access/${uniqueId}`;
+  const  accessLink =`https://secure-share-six.vercel.app/#/access/${uniqueId}`;
 
   // Create new document
   const newDoc = {
