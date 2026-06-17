@@ -35,9 +35,7 @@ export default function App() {
         <Sidebar />
 
         <div className="flex-1">
-          <h1 className="text-red-500 text-3xl">
-  VERSION 2
-</h1>
+          
           <Routes>
            <Route
   path="/"
