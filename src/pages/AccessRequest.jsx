@@ -74,6 +74,8 @@ setApproved(!!approvedRequest);
       purpose: "Access via Link",
       status: "Pending",
     };
+    console.log("OWNER ID:", doc?.ownerId);
+console.log("REQUEST OBJECT:", newRequest);
     try {
   await addDoc(collection(db, "requests"), newRequest);
   console.log("Request saved to Firestore");

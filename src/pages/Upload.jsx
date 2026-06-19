@@ -10,7 +10,9 @@ function Upload({ documents, setDocuments, requests, setRequests,logs,setLogs })
   const [expiryHours, setExpiryHours] = useState("");
   const handleUpload = async() => {
   console.log("Before upload:",documents);
-
+  console.log("Current User:", auth.currentUser);
+console.log("Name:", name);
+console.log("File:", file);
   if (!name || !file) {
     console.log("Name or file missing", name, file);
     return;
