@@ -71,19 +71,7 @@ try {
   console.error("Error saving document:", error);
 }
   // Create new request
-  const newRequest = {
-    id: Date.now() + 1,
-    requester: "External User",
-    document: name,
-    purpose: "Access Request",
-    status: "Pending",
-  };
-  try {
-  await addDoc(collection(db, "requests"), newRequest);
-  console.log("Request saved to Firestore!");
-} catch (error) {
-  console.error("Error saving request:", error);
-}
+ 
 
   // Add document
   setDocuments((prev) => {
@@ -93,11 +81,6 @@ try {
   });
   console.log("Document added:", newDoc);
   // Add request
-  setRequests((prev) => {
-  const updated = [...prev, newRequest];
-  localStorage.setItem("requests", JSON.stringify(updated));
-  return updated;
-});
 const newLog = {
   id: Date.now() + 2,
   action: "Document Uploaded",
