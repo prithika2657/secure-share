@@ -5,8 +5,32 @@ import {
   updateDoc,
   doc as firestoreDoc,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 function Requests({ requests, setRequests, logs, setLogs }) {
+  const [firestoreRequests, setFirestoreRequests] = useState([]);
+
+useEffect(() => {
+  const fetchRequests = async () => {
+    try {
+      const snapshot = await getDocs(
+        collection(db, "requests")
+      );
+
+      const data = snapshot.docs.map((doc) =>
+        doc.data()
+      );
+
+      console.log("Firestore Requests:", data);
+
+      setFirestoreRequests(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchRequests();
+}, []);
   const updateStatus = async(id, newStatus) => {
     // Update requests and save to localStorage
     try {
@@ -74,10 +98,13 @@ function Requests({ requests, setRequests, logs, setLogs }) {
       return updatedLogs;
     });
   };
-const filteredRequests = requests.filter(
+const filteredRequests = firestoreRequests.filter(
   (request) =>
     request.documentOwnerId === auth.currentUser?.uid
 );
+console.log("Current User UID:", auth.currentUser?.uid);
+console.log("Firestore Requests:", firestoreRequests);
+console.log("Filtered Requests:", filteredRequests);
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">
