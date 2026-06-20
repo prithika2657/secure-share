@@ -56,7 +56,7 @@ export default function App() {
     <HashRouter>
     <RouteDebugger />
       <div className="flex">
-        <Sidebar />
+         {auth.currentUser && <Sidebar />}
 
         <div className="flex-1">
           
@@ -69,7 +69,7 @@ export default function App() {
   path="/login"
   element={<Login />}
 />
-           <Route
+ <Route
   path="/"
   element={
     <Dashboard
@@ -121,7 +121,6 @@ export default function App() {
 
   }
 />
-
             <Route
   path="/logs"
   element={

@@ -63,11 +63,17 @@ setApproved(!!approvedRequest);
 
  const [sent, setSent] = useState(false);
  const [approved, setApproved] = useState(false);
+ const [requesterName, setRequesterName] =
+  useState("");
  const handleRequest = async() => {
   console.log("Current document:", doc); 
+  if (!requesterName.trim()) {
+  alert("Please enter your name");
+  return;
+}
   const newRequest = {
       id: Date.now(),
-      requester: "External User",
+      requester: requesterName,
       document: doc?.name,
       accessId: doc?.accessId,
       documentOwnerId: doc?.ownerId,
@@ -121,6 +127,15 @@ console.log("REQUEST OBJECT:", newRequest);
 
         <p><b>Document:</b> {doc.name}</p>
         <p><b>File:</b> {doc.fileName}</p>
+        <input
+  type="text"
+  placeholder="Enter Your Name"
+  value={requesterName}
+  onChange={(e) =>
+    setRequesterName(e.target.value)
+  }
+  className="border p-2 rounded w-full mt-4"
+/>
 
         {approved ? (
   <a
