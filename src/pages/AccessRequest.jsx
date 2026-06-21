@@ -69,10 +69,6 @@ const approvedRequest =
   );
 
 setApproved(!!approvedRequest);
-    }
-     catch (error) {
-      console.error(error);
-    }
 if (
   found?.accessMode === "viewOnce"
 ) {
@@ -86,15 +82,18 @@ if (
   viewSnapshot.docs.find(
     (v) =>
       v.data().accessId ===
-        found.accessId &&
-      v.data().requester ===
-        requesterName
+        found.accessId 
   );
 
   if (alreadyViewed) {
     setViewed(true);
   }
 }
+}
+     catch (error) {
+      console.error(error);
+    }
+
     setLoading(false);
   };
 
