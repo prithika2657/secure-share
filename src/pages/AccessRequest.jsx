@@ -108,6 +108,11 @@ if (
 const [showViewer, setShowViewer] = useState(false);
  const [requesterName, setRequesterName] =
   useState("");
+  const viewerUrl = doc
+  ? `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
+      doc.fileUrl
+    )}`
+  : "";
  const handleRequest = async() => {
   console.log("Current document:", doc); 
   if (!requesterName.trim()) {
@@ -245,12 +250,13 @@ console.log("REQUEST OBJECT:", newRequest);
         ) : (
 
           <iframe
-            src={doc.fileUrl}
-            width="100%"
-            height="700"
-            title="Document Viewer"
-            className="mt-4 border rounded"
-          />
+  src={viewerUrl}
+  width="100%"
+  height="700"
+  title="Document Viewer"
+  className="mt-4 border rounded"
+  sandbox="allow-same-origin allow-scripts"
+/>
 
         )}
       </>
@@ -259,16 +265,31 @@ console.log("REQUEST OBJECT:", newRequest);
 
   ) : doc.accessMode === "expiry" ? (
 
-    <a
-      href={doc.fileUrl}
-      target="_blank"
-      rel="noreferrer"
-      className="mt-4 inline-block bg-green-600 text-white px-4 py-2 rounded"
-    >
-      Open Document
-    </a>
+  <>
+    {!showViewer ? (
 
-  ) : null
+      <button
+        onClick={() => setShowViewer(true)}
+        className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
+      >
+        View Document
+      </button>
+
+    ) : (
+
+      <iframe
+        src={viewerUrl}
+        width="100%"
+        height="700"
+        title="Document Viewer"
+        className="mt-4 border rounded"
+        sandbox="allow-same-origin allow-scripts"
+      />
+
+    )}
+  </>
+
+) : null
 
 )    : !sent ? (
   <button
