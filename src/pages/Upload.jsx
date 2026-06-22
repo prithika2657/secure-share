@@ -8,6 +8,7 @@ function Upload({ documents, setDocuments, requests, setRequests,logs,setLogs })
   const [message, setMessage] = useState("");
   const [accessMode, setAccessMode] = useState("download");
   const [expiryHours, setExpiryHours] = useState("");
+  const [copied, setCopied] = useState(false);
   const handleUpload = async() => {
   console.log("Before upload:",documents);
   console.log("Current User:", auth.currentUser);
@@ -109,6 +110,19 @@ try {
   setFile(null);
 };
   const latestDoc = documents[documents.length - 1];
+  const handleCopyLink = () => {
+
+  navigator.clipboard.writeText(
+    accessLink
+  );
+
+  setCopied(true);
+
+  setTimeout(() => {
+    setCopied(false);
+  }, 2000);
+
+};
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">
@@ -197,14 +211,18 @@ try {
       Open Access Link
     </a>
 
-    <button
-      onClick={() =>
-        navigator.clipboard.writeText(latestDoc.accessLink)
-      }
-      className="mt-2 bg-green-600 text-white px-4 py-2 rounded"
-    >
-      Copy Link
-    </button>
+   <button
+  onClick={handleCopyLink}
+  className={`px-4 py-2 rounded text-white transition-all ${
+    copied
+      ? "bg-green-600"
+      : "bg-blue-600"
+  }`}
+>
+  {copied
+    ? "✓ Copied"
+    : "📋 Copy Link"}
+</button>
   </div>
 )}
    {message && (
