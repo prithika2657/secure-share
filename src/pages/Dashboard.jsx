@@ -47,14 +47,16 @@ const [showNotifications,
   useState(false);
   console.log("Dashboard documents:", documents);
   useEffect(() => {
-  const fetchNotifications = async () => {
-    try {
-      const snapshot = await getDocs(
-        collection(db, "notifications")
-      );
+
+  const unsubscribe = onSnapshot(
+    collection(db, "notifications"),
+    (snapshot) => {
 
       const data = snapshot.docs
-        .map((doc) => doc.data())
+        .map((doc) => ({
+          firestoreId: doc.id,
+          ...doc.data(),
+        }))
         .filter(
           (n) =>
             n.ownerId ===
@@ -68,12 +70,14 @@ const [showNotifications,
 
       setNotifications(data);
 
-    } catch (error) {
+    },
+    (error) => {
       console.error(error);
     }
-  };
+  );
 
-  fetchNotifications();
+  return () => unsubscribe();
+
 }, []);
   const totalDocuments = documents.length;
 
