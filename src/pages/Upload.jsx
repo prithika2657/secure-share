@@ -26,13 +26,19 @@ formData.append(
   "secureshare_upload"
 );
 
-const cloudinaryResponse = await fetch(
-  "https://api.cloudinary.com/v1_1/dpdr2tgpd/auto/upload",
-  {
-    method: "POST",
-    body: formData,
-  }
-);
+const resourceType =
+  file.type.startsWith("image/")
+    ? "image"
+    : "raw";
+
+const cloudinaryResponse =
+  await fetch(
+    `https://api.cloudinary.com/v1_1/dpdr2tgpd/${resourceType}/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
 
 const cloudinaryData =
   await cloudinaryResponse.json();
