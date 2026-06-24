@@ -14,6 +14,8 @@ function Upload({ documents, setDocuments, requests, setRequests,logs,setLogs })
   console.log("Current User:", auth.currentUser);
 console.log("Name:", name);
 console.log("File:", file);
+console.log("Original File Type:", file.type);
+console.log("Original File Size:", file.size);
   if (!name || !file) {
     console.log("Name or file missing", name, file);
     return;
