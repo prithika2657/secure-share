@@ -112,11 +112,11 @@ if (
 const [showViewer, setShowViewer] = useState(false);
  const [requesterName, setRequesterName] =
   useState("");
-  const viewerUrl = doc
-  ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(
-      doc.fileUrl
-    )}`
-  : "";
+ const viewerUrl = doc?.fileName?.toLowerCase().endsWith(".pdf")
+  ? doc.fileUrl
+  : `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(
+      doc?.fileUrl || ""
+    )}`;
  const handleRequest = async() => {
   console.log("Current document:", doc); 
   if (!requesterName.trim()) {
@@ -160,7 +160,7 @@ console.log("REQUEST OBJECT:", newRequest);
         action: "Access Requested via Link",
         detail: doc?.name,
          timestamp: new Date().toLocaleString(),
-          ownerId: auth.currentUser?.uid,
+       
       },
     ]);
 
