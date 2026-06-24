@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
-import { collection, getDocs,addDoc } from "firebase/firestore";
+import { collection, getDocs,addDoc,onSnapshot } from "firebase/firestore";
 
 function AccessRequest({requests, setRequests, logs, setLogs }) {
   const { id } = useParams();
@@ -57,18 +57,22 @@ console.log("File URL:", found?.fileUrl);
 console.log("Access Mode:", found?.accessMode);
 
       setDoc(found || null);
-      const requestSnapshot = await getDocs(
-  collection(db, "requests")
+onSnapshot(
+  collection(db, "requests"),
+  (snapshot) => {
+
+    const approvedRequest =
+      snapshot.docs.find(
+        (r) =>
+          r.data().accessId === found?.accessId &&
+          r.data().status === "Approved"
+      );
+
+    setApproved(
+      !!approvedRequest
+    );
+  }
 );
-
-const approvedRequest =
-  requestSnapshot.docs.find(
-    (r) =>
-      r.data().accessId === found?.accessId &&
-      r.data().status === "Approved"
-  );
-
-setApproved(!!approvedRequest);
 if (
   found?.accessMode === "viewOnly"
 ) {
