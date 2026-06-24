@@ -42,6 +42,7 @@ const cloudinaryResponse =
 
 const cloudinaryData =
   await cloudinaryResponse.json();
+  console.log("Cloudinary Response:", cloudinaryData);
 
 console.log(
   "Cloudinary Upload:",
@@ -49,6 +50,8 @@ console.log(
 );
 
 const fileUrl = cloudinaryData.secure_url;
+console.log("RESOURCE:", cloudinaryData.resource_type);
+console.log("FILE URL TO SAVE:", fileUrl);
   const uniqueId = `doc-${Math.random()
   .toString(36)
   .substring(2, 10)}`;
