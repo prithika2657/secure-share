@@ -155,6 +155,7 @@ console.log("REQUEST OBJECT:", newRequest);
         id: Date.now(),
         action: "Access Requested via Link",
         detail: doc?.name,
+         timestamp: new Date().toLocaleString(),
       },
     ]);
 
@@ -285,7 +286,7 @@ console.log("REQUEST OBJECT:", newRequest);
         text-4xl
         font-bold
         text-gray-500
-        opacity-40
+        opacity-20
         rotate-[-30deg]
         text-center
       "
@@ -347,7 +348,7 @@ ID-{id}
         text-4xl
         font-bold
         text-gray-500
-        opacity-40
+        opacity-20
         rotate-[-30deg]
         text-center
       "

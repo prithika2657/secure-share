@@ -9,7 +9,9 @@ function AuditLogs({ logs =[] }) {
         {logs.length === 0 ? (
           <p>No logs yet</p>
         ) : (
-          logs.map((log) => (
+         [...logs]
+  .sort((a, b) => b.id - a.id)
+  .map((log) => (
             <div
                key={log.id}
               className="border-b py-2"
@@ -20,6 +22,9 @@ function AuditLogs({ logs =[] }) {
                 </span>{" "}
                 - {log.detail}
               </p>
+              <p className="text-xs text-gray-500">
+  {log.timestamp}
+</p>
             </div>
           ))
         )}

@@ -101,6 +101,7 @@ setFirestoreRequests(refreshedRequests);
               ? "Request Approved"
               : "Request Rejected",
           detail: `Request ID ${id}`,
+        timestamp: new Date().toLocaleString(),
         },
       ];
 

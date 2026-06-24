@@ -87,6 +87,7 @@ const newLog = {
   id: Date.now() + 2,
   action: "Document Uploaded",
   detail: name,
+   timestamp: new Date().toLocaleString(),
 };
 try {
   await addDoc(collection(db, "logs"), newLog);
