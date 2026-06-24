@@ -259,14 +259,48 @@ console.log("REQUEST OBJECT:", newRequest);
 
         ) : (
 
-          <iframe
-  src={viewerUrl}
-  width="100%"
-  height="700"
-  title="Document Viewer"
-  className="mt-4 border rounded"
-  sandbox="allow-same-origin allow-scripts"
-/>
+         <div className="relative">
+
+  <iframe
+    src={viewerUrl}
+    width="100%"
+    height="700"
+    title="Document Viewer"
+    className="mt-4 border rounded"
+    sandbox="allow-same-origin allow-scripts"
+  />
+
+  <div
+    className="
+      absolute
+      inset-0
+      flex
+      items-center
+      justify-center
+      pointer-events-none
+    "
+  >
+    <div
+      className="
+        text-4xl
+        font-bold
+        text-gray-500
+        opacity-40
+        rotate-[-30deg]
+        text-center
+      "
+    >
+      CONFIDENTIAL
+      <br />
+      {requesterName}
+<br />
+ID-{id}
+      <br />
+      {new Date().toLocaleDateString()}
+    </div>
+  </div>
+
+</div>
 
         )}
       </>
@@ -287,14 +321,48 @@ console.log("REQUEST OBJECT:", newRequest);
 
     ) : (
 
-      <iframe
-        src={viewerUrl}
-        width="100%"
-        height="700"
-        title="Document Viewer"
-        className="mt-4 border rounded"
-        sandbox="allow-same-origin allow-scripts"
-      />
+      <div className="relative">
+
+  <iframe
+    src={viewerUrl}
+    width="100%"
+    height="700"
+    title="Document Viewer"
+    className="mt-4 border rounded"
+    sandbox="allow-same-origin allow-scripts"
+  />
+
+  <div
+    className="
+      absolute
+      inset-0
+      flex
+      items-center
+      justify-center
+      pointer-events-none
+    "
+  >
+    <div
+      className="
+        text-4xl
+        font-bold
+        text-gray-500
+        opacity-40
+        rotate-[-30deg]
+        text-center
+      "
+    >
+      CONFIDENTIAL
+      <br />
+     {requesterName}
+<br />
+ID-{id}
+      <br />
+      {new Date().toLocaleDateString()}
+    </div>
+  </div>
+
+</div>
 
     )}
   </>
