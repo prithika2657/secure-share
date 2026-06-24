@@ -160,6 +160,7 @@ console.log("REQUEST OBJECT:", newRequest);
         action: "Access Requested via Link",
         detail: doc?.name,
          timestamp: new Date().toLocaleString(),
+          ownerId: auth.currentUser?.uid,
       },
     ]);
 

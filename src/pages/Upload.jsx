@@ -88,6 +88,7 @@ const newLog = {
   action: "Document Uploaded",
   detail: name,
    timestamp: new Date().toLocaleString(),
+   ownerId: auth.currentUser?.uid
 };
 try {
   await addDoc(collection(db, "logs"), newLog);

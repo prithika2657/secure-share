@@ -1,4 +1,10 @@
+import { auth } from "../firebase";
 function AuditLogs({ logs =[] }) {
+  const userLogs = logs.filter(
+  (log) =>
+    log.ownerId ===
+    auth.currentUser?.uid
+);
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">
@@ -6,10 +12,10 @@ function AuditLogs({ logs =[] }) {
       </h1>
 
       <div className="bg-white p-6 rounded-xl shadow">
-        {logs.length === 0 ? (
+       {userLogs.length === 0 ? (
           <p>No logs yet</p>
         ) : (
-         [...logs]
+         [...userLogs]
   .sort((a, b) => b.id - a.id)
   .map((log) => (
             <div

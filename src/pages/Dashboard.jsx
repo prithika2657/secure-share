@@ -46,6 +46,17 @@ const [showNotifications,
   setShowNotifications] =
   useState(false);
   console.log("Dashboard documents:", documents);
+  const userDocuments = documents.filter(
+  (doc) =>
+    doc.ownerId ===
+    auth.currentUser?.uid
+);
+
+const userRequests = requests.filter(
+  (req) =>
+    req.documentOwnerId ===
+    auth.currentUser?.uid
+);
   useEffect(() => {
 
   const unsubscribe = onSnapshot(
@@ -79,17 +90,18 @@ const [showNotifications,
   return () => unsubscribe();
 
 }, []);
-  const totalDocuments = documents.length;
+  const totalDocuments =
+  userDocuments.length;
 
   const pendingRequests =
-    requests.filter(
-      (r) => r.status === "Pending"
-    ).length;
+  userRequests.filter(
+    (r) => r.status === "Pending"
+  ).length;
 
   const approvedRequests =
-    requests.filter(
-      (r) => r.status === "Approved"
-    ).length;
+  userRequests.filter(
+    (r) => r.status === "Approved"
+  ).length;
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

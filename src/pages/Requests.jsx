@@ -102,6 +102,7 @@ setFirestoreRequests(refreshedRequests);
               : "Request Rejected",
           detail: `Request ID ${id}`,
         timestamp: new Date().toLocaleString(),
+         ownerId: auth.currentUser?.uid,
         },
       ];
 
