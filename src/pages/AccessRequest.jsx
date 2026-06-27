@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { collection, getDocs,addDoc,onSnapshot } from "firebase/firestore";
-
+import { useNavigate } from "react-router-dom";
 function AccessRequest({requests, setRequests, logs, setLogs }) {
+  const navigate = useNavigate();
   const { id } = useParams();
  useEffect(() => {
   const fetchDocument = async() => {
@@ -73,33 +74,14 @@ onSnapshot(
     );
   }
 );
-if (
-  found?.accessMode === "viewOnly"
-) {
 
-  const viewSnapshot =
-    await getDocs(
-      collection(db, "viewLogs")
-    );
-
-  const alreadyViewed =
-  viewSnapshot.docs.find(
-    (v) =>
-      v.data().accessId ===
-        found.accessId 
-  );
-
-  if (alreadyViewed) {
-    setViewed(true);
-  }
-}
-}
-     catch (error) {
-      console.error(error);
-    }
 
     setLoading(false);
-  };
+} catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+};
 
   fetchDocument();
 }, [id]);
@@ -108,15 +90,10 @@ if (
 
  const [sent, setSent] = useState(false);
  const [approved, setApproved] = useState(false);
- const [viewed, setViewed] = useState(false);
-const [showViewer, setShowViewer] = useState(false);
+ 
  const [requesterName, setRequesterName] =
   useState("");
- const viewerUrl = doc?.fileName?.toLowerCase().endsWith(".pdf")
-  ? doc.fileUrl
-  : `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(
-      doc?.fileUrl || ""
-    )}`;
+
  const handleRequest = async() => {
   console.log("Current document:", doc); 
   if (!requesterName.trim()) {
@@ -166,27 +143,11 @@ console.log("REQUEST OBJECT:", newRequest);
 
     setSent(true);
   };
-  const handleViewDocument = async () => {
-
-  setShowViewer(true);
-
-  try {
-
-    await addDoc(
-  collection(db, "viewLogs"),
-  {
-    accessId: doc.accessId,
-    requester: requesterName,
-    viewedAt:
-      new Date().toISOString(),
+ useEffect(() => {
+  if (approved) {
+    navigate(`/viewer/${id}`);
   }
-);
-
-   
-  } catch (error) {
-    console.error(error);
-  }
-};
+}, [approved, navigate, id]);
   if (loading) {
   return (
     <div className="p-6">
@@ -230,152 +191,13 @@ console.log("REQUEST OBJECT:", newRequest);
   className="border p-2 rounded w-full mt-4"
 />
 {console.log("MODE:", doc.accessMode)}
-   {approved ? (
+ {approved ? (
 
-  doc.accessMode === "download" ? (
+  <p className="text-green-600 mt-4 font-semibold">
+    Access Approved ✔
+  </p>
 
-    <a
-      href={doc.fileUrl}
-      target="_blank"
-      rel="noreferrer"
-      className="mt-4 inline-block bg-green-600 text-white px-4 py-2 rounded"
-    >
-      Download Document
-    </a>
-
-  ) : doc.accessMode === "viewOnly" ? (
-
-    viewed ? (
-
-      <p className="text-red-600 mt-4">
-        This document has already been viewed.
-      </p>
-
-    ) : (
-
-      <>
-        {!showViewer ? (
-
-          <button
-            onClick={handleViewDocument}
-            className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
-          >
-            View Document
-          </button>
-
-        ) : (
-
-         <div className="relative">
-
-  <iframe
-    src={viewerUrl}
-    width="100%"
-    height="700"
-    title="Document Viewer"
-    className="mt-4 border rounded"
-    sandbox="allow-same-origin allow-scripts"
-  />
-
-  <div
-    className="
-      absolute
-      inset-0
-      flex
-      items-center
-      justify-center
-      pointer-events-none
-    "
-  >
-    <div
-      className="
-        text-4xl
-        font-bold
-        text-gray-500
-        opacity-20
-        rotate-[-30deg]
-        text-center
-      "
-    >
-      CONFIDENTIAL
-      <br />
-      {requesterName}
-<br />
-ID-{id}
-      <br />
-      {new Date().toLocaleDateString()}
-    </div>
-  </div>
-
-</div>
-
-        )}
-      </>
-
-    )
-
-  ) : doc.accessMode === "expiry" ? (
-
-  <>
-    {!showViewer ? (
-
-      <button
-        onClick={() => setShowViewer(true)}
-        className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
-      >
-        View Document
-      </button>
-
-    ) : (
-
-      <div className="relative">
-
-  <iframe
-    src={viewerUrl}
-    width="100%"
-    height="700"
-    title="Document Viewer"
-    className="mt-4 border rounded"
-    sandbox="allow-same-origin allow-scripts"
-  />
-
-  <div
-    className="
-      absolute
-      inset-0
-      flex
-      items-center
-      justify-center
-      pointer-events-none
-    "
-  >
-    <div
-      className="
-        text-4xl
-        font-bold
-        text-gray-500
-        opacity-20
-        rotate-[-30deg]
-        text-center
-      "
-    >
-      CONFIDENTIAL
-      <br />
-     {requesterName}
-<br />
-ID-{id}
-      <br />
-      {new Date().toLocaleDateString()}
-    </div>
-  </div>
-
-</div>
-
-    )}
-  </>
-
-) : null
-
-)    : !sent ? (
+)  : !sent ? (
   <button
     onClick={handleRequest}
     className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
