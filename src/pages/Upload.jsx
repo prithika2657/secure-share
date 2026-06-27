@@ -2,6 +2,13 @@ import { useState } from "react";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { auth } from "../firebase";
+import {
+  generateAESKey,
+  exportKey,
+  encryptFile,
+  createEncryptedFile,
+  exportIV,
+} from "../utils/crypto";
 function Upload({ documents, setDocuments, requests, setRequests,logs,setLogs }) {
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
@@ -20,18 +27,43 @@ console.log("Original File Size:", file.size);
     console.log("Name or file missing", name, file);
     return;
   }
+  // TEST: Generate AES key
+const aesKey = await generateAESKey();
+
+console.log("Generated AES Key:", aesKey);
+
+const exportedKey = await exportKey(aesKey);
+
+console.log("Exported AES Key:", exportedKey);
+const { encryptedBuffer, iv } = await encryptFile(
+  file,
+  aesKey
+);
+
+console.log(
+  "Encrypted Buffer:",
+  encryptedBuffer
+);
+
+console.log("IV:", iv);
+const encryptedFile = createEncryptedFile(
+  encryptedBuffer,
+  file
+);
+
+console.log("Encrypted File:", encryptedFile);
+const exportedIV = exportIV(iv);
+
+console.log("Exported IV:", exportedIV);
   const formData = new FormData();
 
-formData.append("file", file);
+formData.append("file", encryptedFile);
 formData.append(
   "upload_preset",
   "secureshare_upload"
 );
 
-const resourceType =
-  file.type.startsWith("image/")
-    ? "image"
-    : "raw";
+const resourceType = "raw";
 
 const cloudinaryResponse =
   await fetch(
@@ -41,7 +73,9 @@ const cloudinaryResponse =
       body: formData,
     }
   );
-
+console.log(
+  `https://api.cloudinary.com/v1_1/dpdr2tgpd/${resourceType}/upload`
+);
 const cloudinaryData =
   await cloudinaryResponse.json();
   console.log("Cloudinary Response:", cloudinaryData);
@@ -76,6 +110,8 @@ console.log("FILE URL TO SAVE:", fileUrl);
     new Date().toISOString(),
   ownerId: auth.currentUser.uid,
   ownerEmail: auth.currentUser.email,
+  iv: exportedIV,
+   viewed: false, 
   };
 try {
   await addDoc(collection(db, "documents"), newDoc);
@@ -84,7 +120,17 @@ try {
   console.error("Error saving document:", error);
 }
   // Create new request
- 
+ try {
+  await addDoc(collection(db, "documentKeys"), {
+    accessId: uniqueId,
+    encryptedKey: exportedKey,
+    createdAt: new Date().toISOString(),
+  });
+
+  console.log("AES Key saved successfully!");
+} catch (error) {
+  console.error("Error saving AES Key:", error);
+}
 
   // Add document
   setDocuments((prev) => {
