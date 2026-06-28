@@ -262,6 +262,23 @@ useEffect(() => {
 
   }
 }, [decryptedData, document]);
+useEffect(() => {
+  const disableRightClick = (e) => {
+    e.preventDefault();
+  };
+
+  window.addEventListener(
+    "contextmenu",
+    disableRightClick
+  );
+
+  return () => {
+    window.removeEventListener(
+      "contextmenu",
+      disableRightClick
+    );
+  };
+}, []);
 if (alreadyViewed) {
   return (
     <div className="p-6">
@@ -302,7 +319,9 @@ return (
 {docContent &&
  (document?.accessMode === "viewOnly" ||
   document?.accessMode === "expiry") && (
-  <div className="mt-6 border p-4">
+
+  <div className="relative mt-6 border p-4">
+
     <h3 className="font-bold text-xl mb-4">
       DOCX Preview
     </h3>
@@ -312,23 +331,85 @@ return (
         __html: docContent,
       }}
     />
+
+    <div
+      className="
+        absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        pointer-events-none
+      "
+    >
+      <div
+        className="
+          text-5xl
+          font-bold
+          text-gray-500
+          opacity-20
+          rotate-[-30deg]
+          text-center
+        "
+      >
+        CONFIDENTIAL
+        <br />
+        {document.accessId}
+        <br />
+        {new Date().toLocaleDateString()}
+      </div>
+    </div>
+
   </div>
-)} 
-{(document?.accessMode === "viewOnly"  ||
+)}
+{(document?.accessMode === "viewOnly" ||
   document?.accessMode === "expiry") &&
  fileUrl &&
  document.fileName
    .toLowerCase()
    .endsWith(".pdf") && (
-  <iframe
-    src={`${fileUrl}#toolbar=0`}
-    width="100%"
-    height="800px"
-    title="PDF Preview"
-  />
+
+  <div className="relative">
+
+    <iframe
+      src={`${fileUrl}#toolbar=0`}
+      width="100%"
+      height="800px"
+      title="PDF Preview"
+    />
+
+    <div
+      className="
+        absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        pointer-events-none
+      "
+    >
+      <div
+        className="
+          text-5xl
+          font-bold
+          text-gray-500
+          opacity-20
+          rotate-[-30deg]
+          text-center
+        "
+      >
+        CONFIDENTIAL
+        <br />
+        {document.accessId}
+        <br />
+        {new Date().toLocaleDateString()}
+      </div>
+    </div>
+
+  </div>
 )}
 {(document?.accessMode === "viewOnly" ||
-  document?.accessMode === "expiry")&&
+  document?.accessMode === "expiry") &&
  fileUrl &&
  (
    document.fileName
@@ -341,11 +422,44 @@ return (
      .toLowerCase()
      .endsWith(".png")
  ) && (
-  <img
-    src={fileUrl}
-    alt="Preview"
-    className="max-w-full"
-  />
+
+  <div className="relative">
+
+    <img
+      src={fileUrl}
+      alt="Preview"
+      className="max-w-full"
+    />
+
+    <div
+      className="
+        absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        pointer-events-none
+      "
+    >
+      <div
+        className="
+          text-5xl
+          font-bold
+          text-gray-500
+          opacity-20
+          rotate-[-30deg]
+          text-center
+        "
+      >
+        CONFIDENTIAL
+        <br />
+        {document.accessId}
+        <br />
+        {new Date().toLocaleDateString()}
+      </div>
+    </div>
+
+  </div>
 )}
 {decryptedData &&
  document?.accessMode === "download" && (
