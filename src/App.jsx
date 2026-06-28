@@ -16,7 +16,7 @@ import AuditLogs from "./pages/AuditLogs";
 import AccessRequest from "./pages/AccessRequest.jsx";
 import Signup from "./pages/Signup";
 import { auth } from "./firebase";
-
+import Viewer from "./pages/Viewer";
 
 function RouteDebugger() {
   const location = useLocation();
@@ -133,6 +133,10 @@ export default function App() {
       <AuditLogs logs={logs} />
     </ProtectedRoute>
   }
+/>
+<Route
+  path="/viewer/:id"
+  element={<Viewer />}
 />
           </Routes>
         </div>
