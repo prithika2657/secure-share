@@ -94,6 +94,7 @@ setAesKey(foundKey);
   useState(false);
   const [expired, setExpired] =
   useState(false);
+  const [pdfUrl, setPdfUrl] = useState(null);
   useEffect(() => {
   const loadKey = async () => {
     if (!aesKey) return;
@@ -160,6 +161,23 @@ useEffect(() => {
     setDecryptedData(
       decryptedBuffer
     );
+    if (
+  document.fileName
+    .toLowerCase()
+    .endsWith(".pdf")
+) {
+  const blob = new Blob(
+    [decryptedBuffer],
+    {
+      type: "application/pdf",
+    }
+  );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  setPdfUrl(url);
+}
     if (
   document?.accessMode ===
   "viewOnly"
@@ -364,15 +382,24 @@ return (
 )}
 {(document?.accessMode === "viewOnly" ||
   document?.accessMode === "expiry") &&
- fileUrl &&
+ pdfUrl &&
  document.fileName
    .toLowerCase()
    .endsWith(".pdf") && (
 
-  <div className="relative">
+  <div
+    className="relative"
+    onContextMenu={(e) =>
+      e.preventDefault()
+    }
+    style={{
+      WebkitTouchCallout: "none",
+      userSelect: "none",
+    }}
+  >
 
     <iframe
-      src={`${fileUrl}#toolbar=0`}
+      src={pdfUrl}
       width="100%"
       height="800px"
       title="PDF Preview"
